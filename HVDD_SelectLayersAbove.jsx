@@ -1,11 +1,9 @@
 /*
 HVDD_SelectLayersAbove
 
-Copyright (c) 2018 Hugo van den Doel. All rights reserved.
-http://hugovdd.com
-
-Description:
-Selects all layers above the selected layer in the After Effects Timeline.
+Author: Hugo van den Doel
+Website: http://hugovdd.com
+Description: Adds all layers above the current one to your selected layers.
 */
 function SelectLayersAbove() {
   app.beginUndoGroup("HVDD_SelectLayersAbove");

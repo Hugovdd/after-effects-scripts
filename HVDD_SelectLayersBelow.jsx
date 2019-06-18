@@ -1,11 +1,9 @@
 /*
 HVDD_SelectLayersBelow
 
-Copyright (c) 2018 Hugo van den Doel. All rights reserved.
-http://hugovdd.com
-
-Description:
-Adds all layers below the current one to your selected layers.
+Author: Hugo van den Doel
+Website: http://hugovdd.com
+Description: Adds all layers below the current one to your selected layers.
 */
 function SelectLayersBelow() {
   app.beginUndoGroup("HVDD_SelectLayersBelow");
