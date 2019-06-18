@@ -1,0 +1,11 @@
+/*
+HVDD_SelectLayersAbove
+
+Copyright (c) 2018 Hugo van den Doel. All rights reserved.
+http://hugovdd.com
+
+Description:
+Selects all layers above the selected layer in the After Effects Timeline.
+*/
+
+app.project.activeItem.selectedLayers[].opacity = 50;
