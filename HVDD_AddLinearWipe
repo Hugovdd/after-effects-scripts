@@ -14,7 +14,7 @@ function addLinearWipe() {
       layer.property("ADBE Effect Parade").addProperty("ADBE Linear Wipe");
       layer.property("ADBE Effect Parade").property(1).name = "Binance Linear Wipe";
       var layerTransitionCompletion = layer.property("ADBE Effect Parade").property(1).property("ADBE Linear Wipe-0001");
-			var layerTransitionCompletion_keyTimesArray = [0,0.80000834167501];
+			var layerTransitionCompletion_keyTimesArray = [thisComp.time,thisComp.time + 0.80000834167501];
 			var layerTransitionCompletion_valuesArray = [100,0];
 			layerTransitionCompletion.setValuesAtTimes(layerTransitionCompletion_keyTimesArray, layerTransitionCompletion_valuesArray);
 			var layerTransitionCompletion_easeInSpeedArray = [0,0];
