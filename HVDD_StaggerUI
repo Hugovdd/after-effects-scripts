@@ -1,0 +1,221 @@
+
+
+(function (thisObj) {
+
+    function createDockableUI(thisObj) {
+        var dialog =
+            thisObj instanceof Panel
+                ? thisObj
+                : new Window("window", undefined, undefined, { resizeable: true });
+        dialog.onResizing = dialog.onResize = function() {
+            this.layout.resize();
+        };
+        return dialog;
+    }
+    function showWindow(myWindow) {
+        if (myWindow instanceof Window) {
+            myWindow.center();
+            myWindow.show();
+        }
+        if (myWindow instanceof Panel) {
+            myWindow.layout.layout(true);
+            myWindow.layout.resize();
+        }
+    }
+// WIN
+    // ===
+    var win = createDockableUI(this); 
+        win.text = "Sequence/Stagger"; 
+        win.orientation = "column"; 
+        win.alignChildren = ["center","top"]; 
+        win.spacing = 10; 
+        win.margins = 16; 
+
+    // ROW1
+    // ====
+    var row1 = win.add("group", undefined, {name: "row1"}); 
+        row1.orientation = "row"; 
+        row1.alignChildren = ["left","center"]; 
+        row1.spacing = 10; 
+        row1.margins = 0; 
+
+    var button1 = row1.add("button", undefined, undefined, {name: "button1"}); 
+        button1.text = "+1"; 
+
+    var button10 = row1.add("button", undefined, undefined, {name: "button10"}); 
+        button10.text = "+10"; 
+
+    var buttonSequence = row1.add("button", undefined, undefined, {name: "buttonStagger"}); 
+        buttonSequence.text = "Sequence"; 
+
+    // ROW2
+    // ====
+    var row2 = win.add("group", undefined, {name: "row2"}); 
+        row2.orientation = "row"; 
+        row2.alignChildren = ["left","center"]; 
+        row2.spacing = 10; 
+        row2.margins = 0; 
+
+    var button1R = row2.add("button", undefined, undefined, {name: "button1R"}); 
+        button1R.text = "+1R"; 
+
+    var button10R = row2.add("button", undefined, undefined, {name: "button10R"}); 
+        button10R.text = "+10R"; 
+
+    var buttonSequenceR = row2.add("button", undefined, undefined, {name: "buttonStaggerR"}); 
+        buttonSequenceR.text = "SequenceR"; 
+
+        win.onResizing = win.onResize = function () {
+            this.layout.resize();
+        };
+        win instanceof Window
+            ? (win.center(), win.show()) : (win.layout.layout(true), win.layout.resize());
+
+    showWindow(win);
+    
+
+
+    button1.onClick = function(){
+        var comp = app.project.activeItem;
+
+        if (!(comp && comp instanceof CompItem)) { //Check for active comp
+        alert("Please select a composition!");
+        return;
+        }
+        var selLayers = comp.selectedLayers;
+        if (selLayers.length < 2) { //Check for layer selected
+        alert("Select at least 2 layers.");
+        return;
+        }
+        app.beginUndoGroup("Stagger Layers")
+        var x = 0;
+        for (i = 1; i < selLayers.length; i++) {
+            x += 1; // Amount of frames to stagger by
+            selLayers[i].startTime += x * comp.frameDuration;
+        }
+    
+        app.endUndoGroup();
+    }
+    button10.onClick = function(){
+        var comp = app.project.activeItem;
+
+        if (!(comp && comp instanceof CompItem)) { //Check for active comp
+        alert("Please select a composition!");
+        return;
+        }
+        var selLayers = comp.selectedLayers;
+        if (selLayers.length < 2) { //Check for layer selected
+        alert("Select at least 2 layers.");
+        return;
+        }
+        app.beginUndoGroup("Stagger Layers")
+        var x = 0;
+        for (i = 1; i < selLayers.length; i++) {
+            x += 10; // Amount of frames to stagger by
+            selLayers[i].startTime += x * comp.frameDuration;
+        }
+    
+        app.endUndoGroup();
+    }
+    buttonSequence.onClick  = function(){
+            app.beginUndoGroup("Sequence Layers"); // Begin undo group
+            var comp = app.project.activeItem; // Get active composition
+            if (!(comp && comp instanceof CompItem)) { //Check for active comp
+                alert("Please select a composition!");
+                return;
+            }
+            var selLayers = comp.selectedLayers;
+            if (selLayers.length < 2) { //Check for layer selected
+                alert("Select at least 2 layers.");
+                return;
+            }
+            var prevStart = selLayers[0].startTime;
+            var prevIn = selLayers[0].inPoint; 
+            var prevOut = selLayers[0].outPoint; 
+            var sub; // Initialize variable
+            for (var i = 1; i < selLayers.length; i++) { // Loop through selected frames
+                sub = selLayers[i].inPoint - selLayers[i].startTime; // Calculate time substraction
+                selLayers[i].startTime = prevOut - sub; // Set layer's start time
+                prevStart = selLayers[i].startTime; // Set current layer's start time for reference to next
+                prevIn = selLayers[i].inPoint; // Set current layer's in point for reference to next
+                prevOut = selLayers[i].outPoint; // Set current layer's out point for reference to next
+            }
+            app.endUndoGroup(); // End undo group
+    }
+    
+    button1R.onClick = function(){
+        var comp = app.project.activeItem;
+
+        if (!(comp && comp instanceof CompItem)) { //Check for active comp
+        alert("Please select a composition!");
+        return;
+        }
+        var selLayers = comp.selectedLayers;
+        if (selLayers.length < 2) { //Check for layer selected
+        alert("Select at least 2 layers.");
+        return;
+        }
+        app.beginUndoGroup("Stagger Layers")
+        var x = 0;
+        for (var i = selLayers.length - 2; i >= 0; i--) {
+            x += 1; // Amount of frames to stagger by
+            selLayers[i].startTime += x * comp.frameDuration;
+        }
+    
+        app.endUndoGroup();
+    }
+    button10R.onClick = function(){
+        var comp = app.project.activeItem;
+
+        if (!(comp && comp instanceof CompItem)) { //Check for active comp
+        alert("Please select a composition!");
+        return;
+        }
+        var selLayers = comp.selectedLayers;
+        if (selLayers.length < 2) { //Check for layer selected
+        alert("Select at least 2 layers.");
+        return;
+        }
+        app.beginUndoGroup("Stagger Layers")
+        var x = 0;
+        for (var i = selLayers.length - 2; i >= 0; i--) {
+            x += 10; // Amount of frames to stagger by
+            selLayers[i].startTime += x * comp.frameDuration;
+        }
+    
+        app.endUndoGroup();
+    }
+    buttonSequenceR.onClick  = function(){
+        app.beginUndoGroup("Sequence Layers"); // Begin undo group
+        var comp = app.project.activeItem; // Get active composition
+        if (!(comp && comp instanceof CompItem)) { //Check for active comp
+            alert("Please select a composition!");
+            return;
+        }
+        var selLayers = comp.selectedLayers;
+        if (selLayers.length < 2) { //Check for layer selected
+            alert("Select at least 2 layers.");
+            return;
+        }
+        var lastLayer = selLayers[selLayers.length - 1]
+        var prevStart = lastLayer.startTime;
+        var prevIn = lastLayer.inPoint; 
+        var prevOut = lastLayer.outPoint; 
+        alert(lastLayer.name);
+        var sub; // Initialize variable
+        for (var i = selLayers.length - 1; i >= 0; i--) { // Loop through selected layers
+            sub = selLayers[i].inPoint - selLayers[i].startTime; // Calculate time substraction
+            selLayers[i].startTime = prevOut - sub; // Set layer's start time
+            prevStart = selLayers[i].startTime; // Set current layer's start time for reference to next
+            prevIn = selLayers[i].inPoint; // Set current layer's in point for reference to next
+            prevOut = selLayers[i].outPoint; // Set current layer's out point for reference to next
+        }
+        app.endUndoGroup(); // End undo group
+}
+
+
+})();
+
+
+
+

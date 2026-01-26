@@ -7,7 +7,6 @@ Description: Staggers selected layers in time by x. Change within for loop.
 */
 
 
-
 function staggerLayers() {
     app.beginUndoGroup("Stagger Layers");
     var thisComp = app.project.activeItem; //Current compositon
@@ -17,7 +16,6 @@ function staggerLayers() {
         x += 1; // Amount of frames to stagger by
         selLayers[i].startTime += x * thisComp.frameDuration;
     }
-
 
     app.endUndoGroup();
 }
